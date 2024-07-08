@@ -1,0 +1,150 @@
+{% extends "layaout.html" %}
+
+
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="mt-4 z-20 relative">
+    <form class="relative flex flex-col justify-center items-center h-screen" method="post"  enctype="multipart/form-data"> 
+        <div class="flex items-center justify-center flex-col ">
+            <div class="video-wrap">
+                <video id="video" playsinline autoplay style="clip-path: circle(50% at 50% 50%);" class="mx-auto  h-auto "></video>
+            </div>
+            {% csrf_token %}
+            {{ form |crispy }}
+             
+            <div class="controller w-full flex justify-center">
+                <button id="snap" class="mt-5 px-5 py-4 text-base font-medium text-center text-white transition duration-500 ease-in-out transform bg-black lg:px-10 rounded-xl hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <i class="ri-camera-3-line"></i>
+                    Tomar Foto
+                </button>
+            </div>
+
+            
+        </div>
+        <canvas class="mx-auto w-[20px] h-[20px]" id="canvas"></canvas>
+        {% csrf_token %}
+       
+        <button id="btnEnviar" onClick="replaceBtn()" type="submit" class="bg-black text-white w-[250px] lg:w-[300px] mx-auto h-[50px] rounded-md">Enviar</button>
+
+        <div class="flex justify-center flex-col items-center hidden" id="container-btn">
+          
+            <h5 id="loader-text" class="text-lg mt-4 text-center font-bold">Analizando...</h5>
+        </div>
+    </form>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+<script src="https://unpkg.com/create-file-list"></script>
+<script>
+function dataFileDnD() {
+    return {
+        files: [],
+        fileDragging: null,
+        fileDropping: null,
+        humanFileSize(size) {
+            const i = Math.floor(Math.log(size) / Math.log(1024));
+            return (
+                (size / Math.pow(1024, i)).toFixed(2) * 1 +
+                " " +
+                ["B", "kB", "MB", "GB", "TB"][i]
+            );
+        },
+        remove(index) {
+            let files = [...this.files];
+            files.splice(index, 1);
+
+            this.files = createFileList(files);
+        },
+        drop(e) {
+            let removed, add;
+            let files = [...this.files];
+
+            removed = files.splice(this.fileDragging, 1);
+            files.splice(this.fileDropping, 0, ...removed);
+
+            this.files = createFileList(files);
+
+            this.fileDropping = null;
+            this.fileDragging = null;
+        },
+        dragenter(e) {
+            let targetElem = e.target.closest("[draggable]");
+
+            this.fileDropping = targetElem.getAttribute("data-index");
+        },
+        dragstart(e) {
+            this.fileDragging = e.target
+                .closest("[draggable]")
+                .getAttribute("data-index");
+            e.dataTransfer.effectAllowed = "move";
+        },
+        loadFile(file) {
+            const preview = document.querySelectorAll(".preview");
+            const blobUrl = URL.createObjectURL(file);
+
+            preview.forEach(elem => {
+                elem.onload = () => {
+                    URL.revokeObjectURL(elem.src); // free memory
+                };
+            });
+
+            return blobUrl;
+        },
+        addFiles(e) {
+            const files = createFileList([...this.files], [...e.target.files]);
+            this.files = files;
+            this.form.formData.files = [...files];
+        }
+    };
+}
+</script>
+
+   
+
+
+
+<script>
+    'use strict';
+    const video = document.getElementById('video');
+    const snap = document.getElementById("snap");
+    const canvas = document.getElementById('canvas');
+    const inputImage = document.getElementById('id_image');
+    const constraints = { video: { width: 800, height: 600, } };
+
+    // Acceso a la webcam
+    async function init() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            handleSuccess(stream);
+        } catch (e) {
+            console.error(`navigator.getUserMedia error:${e.toString()}`);
+        }
+    }
+
+    // Correcto!
+    function handleSuccess(stream) {
+        window.stream = stream;
+        video.srcObject = stream;
+    }
+
+    // Dibuja la imagen
+    snap.addEventListener("click", function() {
+        const context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(blob => {
+            const file = new File([blob], "captured-image.png", { type: "image/png" });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            inputImage.files = dataTransfer.files;
+        }, 'image/png');
+    });
+
+    init();
+</script>
+
+
+{% endblock content %}
+
