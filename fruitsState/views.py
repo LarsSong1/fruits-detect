@@ -57,8 +57,38 @@ def Register(request):
 
 def Home(request):
     user = request.user
+    images = ImageModel.objects.all()
+
+    stats = {
+        'total_good': 0,
+        'total_bad': 0,        
+        'total': 0,
+        'apple': {'good': 0, 'bad': 0},
+        'banana': {'good': 0, 'bad': 0},
+        'orange': {'good': 0, 'bad': 0},
+        'pomegranate': {'good': 0, 'bad': 0},
+    }
+
+    # Calcular estadísticas
+    for image in images:
+        stats['total_good'] += image.good_apple + image.good_banana + image.good_orange + image.good_pomegranate
+        stats['total_bad'] += image.bad_apple + image.bad_banana + image.bad_orange + image.bad_pomegranate
+
+        stats['total'] += image.good_apple + image.good_banana + image.good_orange + image.good_pomegranate + image.bad_apple + image.bad_banana + image.bad_orange + image.bad_pomegranate
+        stats['apple']['good'] += image.good_apple
+        stats['apple']['bad'] += image.bad_apple
+
+        stats['banana']['good'] += image.good_banana
+        stats['banana']['bad'] += image.bad_banana
+
+        stats['orange']['good'] += image.good_orange
+        stats['orange']['bad'] += image.bad_orange
+
+        stats['pomegranate']['good'] += image.good_pomegranate
+        stats['pomegranate']['bad'] += image.bad_pomegranate
     return render(request,'home.html', {
-        'user': user
+        'user': user,
+        'stats': stats
     })
 
 
