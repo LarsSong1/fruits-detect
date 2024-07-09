@@ -1,0 +1,14 @@
+{% extends "layaout.html" %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="bg-white p-4">
+    <form method="post" class="w-[94%] mx-auto">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="bg-black text-white w-full lg:w-[300px] mx-auto mt-4 h-[50px] rounded-md">Enviar</button>
+    </form>
+</div>
+
+{% endblock content %}

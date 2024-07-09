@@ -1,2 +1,77 @@
 {% extends "layaout.html" %}
 
+{% block content %}
+
+
+    <div class="bg-white lg:h-screen flex flex-col gap-4 p-4 md:gap-8 md:p-6">
+        <div class="flex items-center gap-4">
+       
+        <h1 class="font-semibold text-lg md:text-xl">Productos</h1>
+        </div>
+        <div class="grid gap-6">
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col" data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <p class="text-sm text-muted-foreground">Total Productos Analizados</p>
+                <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Buenos y Malos</h3>
+            </div>
+            <div class="p-6">
+                <div class="text-4xl font-bold">1,250</div>
+            </div>
+            </div>
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col" data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <p class="text-sm text-muted-foreground">Productos buenos para vender</p>
+                <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Good Products</h3>
+            </div>
+            <div class="p-6">
+                <div class="text-4xl font-bold">950</div>
+            </div>
+            </div>
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col" data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <p class="text-sm text-muted-foreground">Non-Sellable Products</p>
+                <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Underperforming</h3>
+            </div>
+            <div class="p-6">
+                <div class="text-4xl font-bold">300</div>
+            </div>
+            </div>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col" data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <p class="text-sm text-muted-foreground">Total Oranges</p>
+                <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Oranges</h3>
+            </div>
+            <div class="p-6">
+                <div class="text-4xl font-bold">500</div>
+            </div>
+            </div>
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col" data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <p class="text-sm text-muted-foreground">Total Pomegranates</p>
+                <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Pomegranates</h3>
+            </div>
+            <div class="p-6">
+                <div class="text-4xl font-bold">300</div>
+            </div>
+            </div>
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col" data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <p class="text-sm text-muted-foreground">Total Bananas</p>
+                <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Bananas</h3>
+            </div>
+            <div class="p-6">
+                <div class="text-4xl font-bold">250</div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+
+

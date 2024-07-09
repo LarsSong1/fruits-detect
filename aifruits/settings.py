@@ -111,15 +111,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'es-es'
+TIME_ZONE = 'America/Guayaquil'
 
 USE_I18N = True
-
-USE_TZ = True
-
+USE_TZ= True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -127,6 +123,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+DETECTION_URL = '/media/fruitsDetectedImages/'
 DETECTION_MEDIA_ROOT = os.path.join(MEDIA_ROOT, 'fruitsDetectedImages')
 
 

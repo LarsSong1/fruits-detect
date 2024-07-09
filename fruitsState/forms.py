@@ -47,3 +47,6 @@ class ImageEditForm(forms.ModelForm):
             'good_orange',
             'good_pomegranate'
         ]
+
+
+

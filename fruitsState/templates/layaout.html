@@ -26,7 +26,11 @@
             {% include "components/logo.html" %}
         </a>
         <ul class="mt-4">
-            <span class="text-gray-400 font-bold">ADMIN</span>
+            {% if user.is_superuser %}
+                <span class="text-gray-400 font-bold">ADMIN</span>
+            {% else %}
+                <span class="text-gray-400 font-bold">USUARIO</span>
+            {% endif %}
             <li class="mb-1 group">
                 <a href="{% url "home" %}" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
                     <i class="ri-home-2-line mr-3 text-lg"></i>
@@ -41,14 +45,14 @@
             </li>
            
             <li class="mb-1 group">
-                <a href="{% url "inventory" %}" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <a href="{% url "inventory" user.id %}" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
                     <i class='bx bx-archive mr-3 text-lg'></i>                
                           
                     <span class="text-sm">Inventario</span>
                 </a>
             </li>
             <li class="mb-1 group">
-                <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <a href="{% url "clasification" user.id %}" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
                     <i class="ri-file-list-3-line mr-3 text-lg"></i>
                     <span class="text-sm">Clasificación</span>
                 </a>
@@ -120,9 +124,9 @@
                         </div>                
                     </button>
                     <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
-                        <li>
+                        {% comment %} <li>
                             <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50">Perfil</a>
-                        </li>
+                        </li> {% endcomment %}
                         <li>
                                 <a href="{% url "logout" %}" role="menuitem" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50 cursor-pointer">
                                     Salir
@@ -540,7 +544,7 @@ border-collapse: collapse;
 3. Remove default padding in all browsers.
 */
 
-button,
+
 input,
 optgroup,
 select,
@@ -569,7 +573,7 @@ padding: 0;
 Remove the inheritance of text transform in Edge and Firefox.
 */
 
-button,
+
 select {
 text-transform: none;
 }
@@ -579,17 +583,7 @@ text-transform: none;
 2. Remove default button styles.
 */
 
-button,
-[type='button'],
-[type='reset'],
-[type='submit'] {
--webkit-appearance: button;
-/* 1 */
-background-color: transparent;
-/* 2 */
-background-image: none;
-/* 2 */
-}
+
 
 /*
 Use the modern Firefox focus style for all focusable elements.
@@ -619,22 +613,18 @@ vertical-align: baseline;
 Correct the cursor style of increment and decrement buttons in Safari.
 */
 
-::-webkit-inner-spin-button,
-::-webkit-outer-spin-button {
-height: auto;
-}
 
 /*
 1. Correct the odd appearance in Chrome and Safari.
 2. Correct the outline style in Safari.
 */
-
+{% comment %} 
 [type='search'] {
 -webkit-appearance: textfield;
 /* 1 */
 outline-offset: -2px;
 /* 2 */
-}
+} {% endcomment %}
 
 /*
 Remove the inner padding in Chrome and Safari on macOS.
@@ -649,12 +639,12 @@ Remove the inner padding in Chrome and Safari on macOS.
 2. Change font properties to `inherit` in Safari.
 */
 
-::-webkit-file-upload-button {
+{% comment %} ::-webkit-file-upload-button {
 -webkit-appearance: button;
 /* 1 */
 font: inherit;
 /* 2 */
-}
+} {% endcomment %}
 
 /*
 Add the correct display in Chrome and Safari.
@@ -741,10 +731,10 @@ color: #9ca3af;
 Set the default cursor for buttons.
 */
 
-button,
+{% comment %} button,
 [role="button"] {
 cursor: pointer;
-}
+} {% endcomment %}
 
 /*
 Make sure disabled buttons don't get the pointer cursor.

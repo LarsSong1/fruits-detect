@@ -1,0 +1,81 @@
+{% extends "layaout.html" %}
+
+{% block content %}
+   <div class="h-screen border-2 border-shadow bg-white flex justify-center items-center">
+        <div class="grid lg:grid-cols-2 grid-cols-1 gap-4 p-4 grow">
+
+            <!-- Manzanas -->
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+                <div class="flex flex-col space-y-1.5 p-6">
+                    <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Manzanas</h3>
+                </div>
+                <div class="p-6 grid gap-2">
+                    <div class="flex items-center justify-between">
+                        <span>Buenas</span>
+                        <span class="font-medium">{{ total_good_apple }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Malas</span>
+                        <span class="font-medium text-red-500">{{ total_bad_apple }}</span>
+                    </div>
+                    <div class="text-sm text-muted-foreground">Detectadas:  {{total_apple}}</div>
+                </div>
+            </div>
+
+            <!-- Bananas -->
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+                <div class="flex flex-col space-y-1.5 p-6">
+                    <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Bananas</h3>
+                </div>
+                <div class="p-6 grid gap-2">
+                    <div class="flex items-center justify-between">
+                        <span>Buenas</span>
+                        <span class="font-medium">{{ total_good_banana }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Malas</span>
+                        <span class="font-medium text-red-500">{{ total_bad_banana }}</span>
+                    </div>
+                    <div class="text-sm text-muted-foreground">Detectadas: {{total_banana}}</div>
+                </div>
+            </div>
+
+            <!-- Naranjas -->
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+                <div class="flex flex-col space-y-1.5 p-6">
+                    <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Naranjas</h3>
+                </div>
+                <div class="p-6 grid gap-2">
+                    <div class="flex items-center justify-between">
+                        <span>Buenas</span>
+                        <span class="font-medium">{{ total_good_orange }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Malas</span>
+                        <span class="font-medium text-red-500">{{ total_bad_orange }}</span>
+                    </div>
+                    <div class="text-sm text-muted-foreground">Detectadas: {{total_orange}}</div>
+                </div>
+            </div>
+
+            <!-- Granadas -->
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+                <div class="flex flex-col space-y-1.5 p-6">
+                    <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Granadas</h3>
+                </div>
+                <div class="p-6 grid gap-2">
+                    <div class="flex items-center justify-between">
+                        <span>Buenas</span>
+                        <span class="font-medium">{{ total_good_pomegranate }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>Malas</span>
+                        <span class="font-medium text-red-500">{{ total_bad_pomegranate }}</span>
+                    </div>
+                    <div class="text-sm text-muted-foreground">Detectadas: {{total_pomegranate}}</div>
+                </div>
+            </div>
+
+        </div>
+   </div>
+{% endblock content %}
