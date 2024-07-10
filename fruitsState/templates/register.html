@@ -7,15 +7,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     {% include "components/tailwind.html" %}
+
 </head>
 <body>
     
-  <section class="w-full max-w-md mx-auto py-12 md:py-24">
+  <section class="w-full mx-auto flex h-screen items-cemter flex-col justify-center mx-auto ps-4 pe-4 z-20 relative overflow-x-hidden">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" preserveAspectRatio="none" viewBox="0 0 1440 560" class="absolute h-[100vh] w-[100vw] left-0">
+      <g mask="url(&quot;#SvgjsMask1000&quot;)" fill="none">
+          <path d="M106.475,226.014C150.046,226.296,193.58,207.049,214.074,168.597C233.617,131.929,218.174,89.941,198.504,53.341C177.321,13.927,151.073,-27.98,106.475,-31.613C56.745,-35.664,7.547,-8.216,-15.79,35.885C-37.921,77.707,-24.334,127.423,1.258,167.221C24.549,203.44,63.415,225.736,106.475,226.014" fill="rgba(39, 183, 10, 0.4)" class="triangle-float2"></path>
+          <path d="M86.855,198.75C127.16,198.871,164.345,178.121,185.335,143.713C207.269,107.756,215.644,61.029,192.221,26.023C170.483,-6.465,125.933,-4.444,86.855,-3.467C50.207,-2.551,10.53,0.543,-9.766,31.071C-31.93,64.409,-30.589,108.436,-10.602,143.122C9.414,177.859,46.764,198.629,86.855,198.75" fill="rgba(39, 183, 10, 0.4)" class="triangle-float3"></path>
+          <path d="M66.717,141.467C93.536,141.57,118.445,127.55,131.999,104.408C145.701,81.013,145.689,52.414,132.866,28.526C119.277,3.21,95.414,-15.8,66.717,-17.212C35.507,-18.748,2.916,-6.179,-11.757,21.41C-25.796,47.808,-14.059,78.881,2.3,103.908C16.876,126.207,40.077,141.364,66.717,141.467" fill="rgba(39, 183, 10, 0.4)" class="triangle-float2"></path>
+          <path d="M1219.41 33.93 a142.52 142.52 0 1 0 285.04 0 a142.52 142.52 0 1 0 -285.04 0z" fill="rgba(39, 183, 10, 0.4)" class="triangle-float1"></path>
+          <path d="M1439.492,243.79C1484.906,242.987,1522.91,212.08,1544.501,172.119C1564.984,134.209,1564.644,88.99,1543.377,51.514C1521.822,13.53,1483.123,-10.978,1439.492,-12.922C1392.057,-15.035,1342.397,0.61,1318.236,41.485C1293.729,82.945,1303.091,134.638,1327.851,175.948C1351.845,215.98,1392.827,244.615,1439.492,243.79" fill="rgba(39, 183, 10, 0.4)" class="triangle-float1"></path>
+          <path d="M1266.3 -12.97 a48.73 48.73 0 1 0 97.46 0 a48.73 48.73 0 1 0 -97.46 0z" fill="rgba(39, 183, 10, 0.4)" class="triangle-float1"></path>
+          <path d="M107.629,676.938C148.878,673.937,181.831,646.225,202.263,610.266C222.408,574.812,228.865,532.665,210.21,496.404C189.905,456.935,152.013,425.868,107.629,426.315C63.854,426.756,31.377,461.071,8.566,498.435C-15.564,537.959,-36.766,585.531,-14.295,626.022C8.611,667.297,60.548,680.363,107.629,676.938" fill="rgba(39, 183, 10, 0.4)" class="triangle-float3"></path>
+          <path d="M-96.48 469.81 a118.29 118.29 0 1 0 236.58 0 a118.29 118.29 0 1 0 -236.58 0z" fill="rgba(39, 183, 10, 0.4)" class="triangle-float2"></path>
+          <path d="M149.062,739.41C201.161,737.346,251.054,716.131,278.348,671.705C306.964,625.126,312.819,565.629,284.586,518.817C257.128,473.29,202.199,459.091,149.062,457.345C91.737,455.462,28.72,461.467,-2.815,509.376C-36.869,561.112,-33.404,631.018,0.723,682.706C31.983,730.053,92.37,741.656,149.062,739.41" fill="rgba(39, 183, 10, 0.4)" class="triangle-float2"></path>
+          <path d="M1394.638,610.652C1427.267,611.765,1452.925,585.988,1469.041,557.595C1484.913,529.63,1490.243,496.516,1475.697,467.839C1459.689,436.28,1429.985,409.228,1394.638,410.915C1361.12,412.515,1340.129,444.569,1325.958,474.986C1314.211,500.2,1315.973,527.985,1328.536,552.802C1342.711,580.802,1363.273,609.582,1394.638,610.652" fill="rgba(39, 183, 10, 0.4)" class="triangle-float2"></path>
+          <path d="M1238.65 462.68 a104.03 104.03 0 1 0 208.06 0 a104.03 104.03 0 1 0 -208.06 0z" fill="rgba(39, 183, 10, 0.4)" class="triangle-float2"></path>
+          <path d="M1284.81 416.52 a11.71 11.71 0 1 0 23.42 0 a11.71 11.71 0 1 0 -23.42 0z" fill="rgba(39, 183, 10, 0.4)" class="triangle-float2"></path>
+      </g>
+      <defs>
+          <mask id="SvgjsMask1000">
+              <rect width="1440" height="560" fill="#ffffff"></rect>
+          </mask>
+          <style>
+              @keyframes float1 {
+                      0%{transform: translate(0, 0)}
+                      50%{transform: translate(-10px, 0)}
+                      100%{transform: translate(0, 0)}
+                  }
+  
+                  .triangle-float1 {
+                      animation: float1 5s infinite;
+                  }
+  
+                  @keyframes float2 {
+                      0%{transform: translate(0, 0)}
+                      50%{transform: translate(-5px, -5px)}
+                      100%{transform: translate(0, 0)}
+                  }
+  
+                  .triangle-float2 {
+                      animation: float2 4s infinite;
+                  }
+  
+                  @keyframes float3 {
+                      0%{transform: translate(0, 0)}
+                      50%{transform: translate(0, -10px)}
+                      100%{transform: translate(0, 0)}
+                  }
+  
+                  .triangle-float3 {
+                      animation: float3 6s infinite;
+                  }
+          </style>
+      </defs>
+    </svg>
+    <div class="w-full mx-auto flex justify-center mb-4">
+      {% include "components/logo.html" %}
+    </div>
     <div class="space-y-4 text-center">
       <h2 class="text-3xl font-bold">Registrate</h2>
       <p class="text-muted-foreground">Crea una cuenta en nuestra plataforma</p>
     </div>
-    <form method="post" class="mt-8 space-y-4" >
+    <form method="post" class="mt-8 space-y-4 mx-auto w-full sm:w-[400px] z-20" >
       {% csrf_token %}
       {{ form|crispy }}
       <button
@@ -25,7 +81,7 @@
         Register
       </button>
     </form>
-    <a href="{% url "login" %}" class="mt-6 cursor-pointer mx-auto w-full flex justify-center text-center text-sm text-muted-foreground">Ya tengo una cuenta</a>
+    <a href="{% url "login" %}" class="mt-6 z-20 cursor-pointer mx-auto w-full flex justify-center text-center text-sm text-muted-foreground">Ya tengo una cuenta</a>
   </section>
 </body>
 </html>

@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from .forms import CreateUser
 from django.utils.translation import activate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic import TemplateView
 from .models import ImageModel, FruitCount
 from .forms import ImageUploadForm, ImageEditForm
 from urllib.error import HTTPError
@@ -17,6 +18,7 @@ import torch
 import pathlib
 import numpy
 from PIL import Image
+from openpyxl import Workbook
 
 # Create your views here.
 
@@ -35,7 +37,7 @@ class SingletonModel:
             raise Exception("This class is a singleton!")
         else:
             # Deben cambiar esta ruta por la donde esta su red neuronal
-            folder_path = 'C:/Users/jairg/Desktop/Frutas IA/fruitsState/IA/Aifruit.pt'
+            folder_path = 'C:/Users/jairg/Desktop/Frutas IA/fruitsState/IA/IAfinal.pt'
             self.model = torch.hub.load('ultralytics/yolov5', 'custom', path=folder_path, force_reload=True)
             SingletonModel._instance = self
 
@@ -57,6 +59,10 @@ def Register(request):
 
 def Home(request):
     user = request.user
+
+    if not user.is_authenticated:
+        return redirect('login')
+    
     images = ImageModel.objects.all()
 
     stats = {
@@ -91,7 +97,159 @@ def Home(request):
         'stats': stats
     })
 
+class GenerateExcell(TemplateView):
+    def get(self, request, *args, **kwargs):
+        dataAnalized = ImageModel.objects.all()
+        wb = Workbook()
+        ws = wb.active
+        ws['B1'] = 'Reporte de datos analizados'
+        ws.merge_cells('B1:E1')
+        ws['B3'] = 'Frutas Analizadas'
+        ws['C3'] = 'Aptos para vender'
+        ws['D3'] = 'No apto para venta'
+        ws['E3'] = 'Naranjas'
+        ws['F3'] = 'Granadas'
+        ws['G3'] = 'Bananas'
+        ws['H3'] = 'Manzanas'
+        ws['I3'] = 'Naranjas Malas'
+        ws['J3'] = 'Naranjas Buenas'
+        ws['K3'] = 'Granadas Malas'
+        ws['L3'] = 'Granadas Buenas'
+        ws['M3'] = 'Bananas Malas'
+        ws['N3'] = 'Bananas Buenas'
+        ws['O3'] = 'Manzanas Malas'
+        ws['P3'] = 'Manzanas Buenas'
 
+        stats = {
+        'total_good': 0,
+        'total_bad': 0,        
+        'total': 0,
+        'apple': {'good': 0, 'bad': 0},
+        'banana': {'good': 0, 'bad': 0},
+        'orange': {'good': 0, 'bad': 0},
+        'pomegranate': {'good': 0, 'bad': 0},
+        }
+
+
+        for data in dataAnalized:
+            stats['total_good'] += data.good_apple + data.good_banana + data.good_orange + data.good_pomegranate
+            stats['total_bad'] += data.bad_apple + data.bad_banana + data.bad_orange + data.bad_pomegranate
+
+            stats['total'] += data.good_apple + data.good_banana + data.good_orange + data.good_pomegranate + data.bad_apple + data.bad_banana + data.bad_orange + data.bad_pomegranate
+            stats['apple']['good'] += data.good_apple
+            stats['apple']['bad'] += data.bad_apple
+
+            stats['banana']['good'] += data.good_banana
+            stats['banana']['bad'] += data.bad_banana
+
+            stats['orange']['good'] += data.good_orange
+            stats['orange']['bad'] += data.bad_orange
+
+            stats['pomegranate']['good'] += data.good_pomegranate
+            stats['pomegranate']['bad'] += data.bad_pomegranate
+        
+
+
+       
+        ws.cell(row=4, column=2).value = stats['total']
+        ws.cell(row=4, column=3).value = stats['total_good']
+        ws.cell(row=4, column=4).value = stats['total_bad']
+        ws.cell(row=4, column=5).value = stats['orange']['good'] + stats['orange']['bad']
+        ws.cell(row=4, column=6).value = stats['pomegranate']['good'] + stats['pomegranate']['bad']
+        ws.cell(row=4, column=7).value = stats['banana']['good'] + stats['banana']['bad']
+        ws.cell(row=4, column=8).value = stats['apple']['good'] + stats['apple']['bad']
+        ws.cell(row=4, column=9).value = stats['orange']['bad']
+        ws.cell(row=4, column=10).value = stats['orange']['good']
+        ws.cell(row=4, column=11).value = stats['pomegranate']['bad']
+        ws.cell(row=4, column=12).value = stats['pomegranate']['good']
+        ws.cell(row=4, column=13).value = stats['banana']['bad']
+        ws.cell(row=4, column=14).value = stats['banana']['good']
+        ws.cell(row=4, column=15).value = stats['apple']['bad']
+        ws.cell(row=4, column=16).value = stats['apple']['good']
+
+        archive_name = 'Reporte.xlsx'
+        response = HttpResponse(content_type='application/ms-excel')
+        content = "attachment; filename={0}".format(archive_name)
+        response['Content-Disposition'] = content
+        wb.save(response)
+        return response
+
+class GenerateExcellPerUser(TemplateView):
+    def get(self, request, *args, **kwargs):
+        dataAnalized = ImageModel.objects.filter(user_id=request.user.id)
+        wb = Workbook()
+        ws = wb.active
+        ws['B1'] = f'Reporte analizados de usuario {request.user}'
+        ws.merge_cells('B1:E1')
+        ws['B3'] = 'Frutas Analizadas'
+        ws['C3'] = 'Aptos para vender'
+        ws['D3'] = 'No apto para venta'
+        ws['E3'] = 'Naranjas'
+        ws['F3'] = 'Granadas'
+        ws['G3'] = 'Bananas'
+        ws['H3'] = 'Manzanas'
+        ws['I3'] = 'Naranjas Malas'
+        ws['J3'] = 'Naranjas Buenas'
+        ws['K3'] = 'Granadas Malas'
+        ws['L3'] = 'Granadas Buenas'
+        ws['M3'] = 'Bananas Malas'
+        ws['N3'] = 'Bananas Buenas'
+        ws['O3'] = 'Manzanas Malas'
+        ws['P3'] = 'Manzanas Buenas'
+
+        stats = {
+        'total_good': 0,
+        'total_bad': 0,        
+        'total': 0,
+        'apple': {'good': 0, 'bad': 0},
+        'banana': {'good': 0, 'bad': 0},
+        'orange': {'good': 0, 'bad': 0},
+        'pomegranate': {'good': 0, 'bad': 0},
+        }
+
+
+        for data in dataAnalized:
+            stats['total_good'] += data.good_apple + data.good_banana + data.good_orange + data.good_pomegranate
+            stats['total_bad'] += data.bad_apple + data.bad_banana + data.bad_orange + data.bad_pomegranate
+
+            stats['total'] += data.good_apple + data.good_banana + data.good_orange + data.good_pomegranate + data.bad_apple + data.bad_banana + data.bad_orange + data.bad_pomegranate
+            stats['apple']['good'] += data.good_apple
+            stats['apple']['bad'] += data.bad_apple
+
+            stats['banana']['good'] += data.good_banana
+            stats['banana']['bad'] += data.bad_banana
+
+            stats['orange']['good'] += data.good_orange
+            stats['orange']['bad'] += data.bad_orange
+
+            stats['pomegranate']['good'] += data.good_pomegranate
+            stats['pomegranate']['bad'] += data.bad_pomegranate
+        
+
+
+       
+        ws.cell(row=4, column=2).value = stats['total']
+        ws.cell(row=4, column=3).value = stats['total_good']
+        ws.cell(row=4, column=4).value = stats['total_bad']
+        ws.cell(row=4, column=5).value = stats['orange']['good'] + stats['orange']['bad']
+        ws.cell(row=4, column=6).value = stats['pomegranate']['good'] + stats['pomegranate']['bad']
+        ws.cell(row=4, column=7).value = stats['banana']['good'] + stats['banana']['bad']
+        ws.cell(row=4, column=8).value = stats['apple']['good'] + stats['apple']['bad']
+        ws.cell(row=4, column=9).value = stats['orange']['bad']
+        ws.cell(row=4, column=10).value = stats['orange']['good']
+        ws.cell(row=4, column=11).value = stats['pomegranate']['bad']
+        ws.cell(row=4, column=12).value = stats['pomegranate']['good']
+        ws.cell(row=4, column=13).value = stats['banana']['bad']
+        ws.cell(row=4, column=14).value = stats['banana']['good']
+        ws.cell(row=4, column=15).value = stats['apple']['bad']
+        ws.cell(row=4, column=16).value = stats['apple']['good']
+
+        archive_name = 'Reporte.xlsx'
+        response = HttpResponse(content_type='application/ms-excel')
+        content = "attachment; filename={0}".format(archive_name)
+        response['Content-Disposition'] = content
+        wb.save(response)
+        return response
 
 
 def Login(request):
@@ -147,11 +305,11 @@ class DetectFruits(CreateView):
                     else:
                         raise
 
-              
+                print(bad_pomegranate)
                 fruitImage.bad_apple = bad_apple
                 fruitImage.bad_banana = bad_banana
                 fruitImage.bad_orange = bad_orange
-                fruitImage.bad_pomegrante = bad_pomegranate
+                fruitImage.bad_pomegranate = bad_pomegranate
                 fruitImage.good_apple = good_apple
                 fruitImage.good_banana = good_banana
                 fruitImage.good_orange = good_orange
@@ -166,31 +324,31 @@ class DetectFruits(CreateView):
 
                 if bad_banana >= 1:
                     fruitImage.fruitsState += f'Platana M:{bad_banana} \n,'
-                    fruitsCount.bananaBad
+                    fruitsCount.bananaBad += bad_banana
 
                 if bad_orange >= 1:
                     fruitImage.fruitsState += f'Naranja M:{bad_orange} \n,'
-                    fruitsCount.orangeBad = bad_orange
+                    fruitsCount.orangeBad += bad_orange
 
                 if bad_pomegranate >= 1:
                     fruitImage.fruitsState += f'Granada M:{bad_pomegranate} \n,'
-                    fruitsCount.pomegranateBad = bad_pomegranate
+                    fruitsCount.pomegranateBad += bad_pomegranate
 
                 if good_apple >= 1:
                     fruitImage.fruitsState += f'Manzana B:{good_apple} \n,'
-                    fruitsCount.appleGood = good_apple
+                    fruitsCount.appleGood += good_apple
 
                 if good_banana >= 1:
                     fruitImage.fruitsState += f'Platano B:{good_banana} \n,'
-                    fruitsCount.bananaGood = good_banana
+                    fruitsCount.bananaGood += good_banana
 
                 if good_orange >= 1:
                     fruitImage.fruitsState += f'Naranja B:{good_orange} \n,'
-                    fruitsCount.orangeGood = good_orange
+                    fruitsCount.orangeGood += good_orange
 
                 if good_pomegranate >= 1:
                     fruitImage.fruitsState += f'Granada B:{good_pomegranate} \n,,'
-                    fruitsCount.pomegranateGood = good_pomegranate
+                    fruitsCount.pomegranateGood += good_pomegranate
 
                 fruitsCount.save()
                 fruitImage.fruitCount_id = fruitsCount
@@ -305,31 +463,34 @@ def fruitState(img_path):
     numGoodPomegranate = 0
     
     for dataFruits in fruits:
-        if dataFruits['clase'] == 1:
-            numBadApple += 1
+        # define el nivel de confianza para filtrar solo las detecciones q cumplen con ese dato
+        if dataFruits['confianza'] > 0.60:
+            if dataFruits['clase'] == 0:
+                numBadApple += 1
 
-        if dataFruits['clase'] == 2:
-            numBadBanana += 1
+            if dataFruits['clase'] == 1:
+                numBadBanana += 1
 
-        if dataFruits['clase'] == 3:
-            numBadOrange +=1
+            if dataFruits['clase'] == 2:
+                numBadOrange +=1
+
+            if dataFruits['clase'] == 3:
+                numBadPomegranate += 1
+            
+            if dataFruits['clase'] == 4:
+                numGoodApple += 1
+            
+            if dataFruits['clase'] == 5:
+                numGoodBanana += 1
+
+            if dataFruits['clase'] == 6:
+                numGoodOrange += 1
+
+            if dataFruits['clase'] == 7:
+                numGoodPomegranate += 1
         
-        if dataFruits['clase'] == 4:
-            numBadPomegranate += 1
-        
-        if dataFruits['clase'] == 5:
-            numGoodApple += 1
-
-        if dataFruits['clase'] == 6:
-            numGoodBanana += 1
-
-        if dataFruits['clase'] == 7:
-            numGoodOrange += 1
-
-        if dataFruits['clase'] == 8:
-            numGoodPomegranate += 1
-        
-    print(fruits)
+    
+    # print(fruits)
 
     return new_img, numBadApple, numBadBanana, numBadOrange, numBadPomegranate, numGoodApple, numGoodBanana, numGoodOrange, numGoodPomegranate
 

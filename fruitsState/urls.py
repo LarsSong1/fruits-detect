@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Home, Register, Login, Logout, DetectFruits, Inventory, EditDetectFruits, DeleteRegisterFruit, Clasification
+from .views import Home, Register, Login, Logout, DetectFruits, Inventory, EditDetectFruits, DeleteRegisterFruit, Clasification, GenerateExcell, GenerateExcellPerUser
 
 urlpatterns = [
     path('', Home, name='home'), 
@@ -10,7 +10,9 @@ urlpatterns = [
     path('edit-detected-fruits/<int:pk>/', EditDetectFruits.as_view(), name='edit-fruits'),
     path('delete-fruit/<int:user_id>/', DeleteRegisterFruit, name='delete-fruit'),
     path('inventory/<int:user_id>/', Inventory, name='inventory'),
-    path('clasification/<int:user_id>/', Clasification, name='clasification')
+    path('clasification/<int:user_id>/', Clasification, name='clasification'),
+    path('generate-report/', GenerateExcell.as_view(), name='generate-report'),
+    path('generate-report/<int:user_id>/', GenerateExcellPerUser.as_view(), name='generate-user-report'),
 ]
 
 

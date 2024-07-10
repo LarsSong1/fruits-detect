@@ -4,14 +4,20 @@
 {% block content %}
     {% load static %}
 
-    <div class="rounded-lg border-2 bg-white h-screen text-card-foreground shadow-sm" data-v0-t="card">
-    <div class="flex flex-col space-y-1.5 p-6">
-        <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Inventario</h3>
-        <p class="text-sm text-muted-foreground">Listado de frutas detectadas en inventario</p>
+    <div class="rounded-lg border-2 bg-white text-card-foreground shadow-sm" data-v0-t="card">
+    <div class="flex justify-between space-y-1.5 p-6 flex-wrap">
+        <div>
+            <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Inventario</h3>
+            <p class="text-sm text-muted-foreground">Listado de frutas detectadas en inventario</p>
+        </div>
+        <a href="{% url "generate-user-report" user.id %}" class="bg-green-800 ps-4 pt-2 pe-2 pb-2 text-white cursor-pointer rounded-lg flex justify-center items-center">
+            <i class="ri-file-excel-2-line me-2"></i>
+            <p class="text-white">Generar Reporte</p>
+        </a>
     </div>
     <div class="p-6">
-        <div class="relative w-full overflow-auto">
-        <table class="w-full caption-bottom text-sm">
+        <div class="relative w-full overflow-scroll">
+        <table class="w-full caption-bottom text-sm min-w-[800px]">
             <thead class="[&amp;_tr]:border-b">
             <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 w-[100px]">
@@ -28,9 +34,9 @@
                 </th>
             </tr>
             </thead>
-            <tbody class="[&amp;_tr:last-child]:border-0">
+            <tbody class="[&amp;_tr:last-child]:border-0 ">
             {% for data in inventory %}
-            <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+            <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted ">
                 <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
                 {% if data.imagesDetected %}
                     <img
@@ -50,29 +56,45 @@
                 <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
                        <div class="grid grid-cols-2">
                             <div>
-                                <p>Bad Apple: {{ data.bad_apple }}</p>
-                                <p>Bad Banana: {{ data.bad_banana }}</p>
-                                <p>Bad Orange: {{ data.bad_orange }}</p>
-                                <p>Bad Pomegranate: {{ data.bad_pomegranate }}</p>
+                                {% if data.bad_apple > 0 %}
+                                    <p>Manzana Mala: {{ data.bad_apple  }}</p>
+                                {% endif %}
+                                {% if data.bad_banana > 0 %}
+                                    <p>Platano Malo: {{ data.bad_banana }}</p>
+                                {% endif %}
+                                {% if data.bad_orange > 0 %}
+                                    <p>Naranja Mala: {{ data.bad_orange }}</p>
+                                {% endif %}
+                                {% if data.bad_pomegranate > 0 %}
+                                    <p>Granada Mala: {{ data.bad_pomegranate }}</p>
+                                {% endif %}
                             </div>
-                           <div>
-                            <p>Good Apple: {{ data.good_apple }}</p>
-                            <p>Good Banana: {{ data.good_banana }}</p>
-                            <p>Good Orange: {{ data.good_orange }}</p>
-                            <p>Good Pomegranate: {{ data.good_pomegranate }}</p>
-                           </div>
+                            <div>
+                                {% if data.good_apple > 0 %}
+                                    <p>Manzana Buena: {{ data.good_apple }}</p>
+                                {% endif %}
+                                {% if data.good_banana > 0 %}
+                                    <p>Platano Bueno: {{ data.good_banana }}</p>
+                                {% endif %}
+                                {% if data.good_orange > 0 %}
+                                    <p>Naranja Buena: {{ data.good_orange }}</p>
+                                {% endif %}
+                                {% if data.good_pomegranate > 0 %}
+                                    <p>Granada Buena: {{ data.good_pomegranate }}</p>
+                                {% endif %}
+                            </div>
                        </div>
                 </td>
              
                 <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
                 <div class="flex items-center gap-2">
-                    <a href="{% url "edit-fruits" data.id %}" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                    <a href="{% url "edit-fruits" data.id %}" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 bg-green-400">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
-                        fill="none"
+                        fill="#fefefe"
                         stroke="currentColor"
                         stroke-width="2"
                         stroke-linecap="round"
@@ -85,13 +107,13 @@
                     </svg>
                     <span class="sr-only">Editar</span>
                     </a>
-                    <a href="{% url "delete-fruit" data.id %}" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                    <a href="{% url "delete-fruit" data.id %}" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 bg-red-400">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
-                        fill="none"
+                        fill="#fefefe"
                         stroke="currentColor"
                         stroke-width="2"
                         stroke-linecap="round"

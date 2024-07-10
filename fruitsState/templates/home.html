@@ -4,10 +4,37 @@
 
 
     <div class="bg-white lg:h-screen flex flex-col gap-4 p-4 md:gap-8 md:p-6">
-        <div class="flex items-center gap-4">
+        <div class="flex items-center justify-between gap-4 me-8">
        
-        <h1 class="font-semibold text-lg md:text-xl">Productos</h1>
+            <h1 class="font-semibold text-lg md:text-xl">Productos</h1>
+            <a href="{% url "generate-report" %}" class="bg-green-800 ps-4 pt-2 pe-2 pb-2 text-white cursor-pointer rounded-lg flex justify-center items-center">
+                <i class="ri-file-excel-2-line me-2"></i>
+                <p class="text-white">Generar Reporte</p>
+            </a>
         </div>
+        <div class="flex flex-wrap gap-4 lg:flex-row flex-col">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-[100%] lg:w-[48%]">
+                <h2 class="text-2xl font-bold mb-4 text-center">Reporte de Frutas</h2>
+                <canvas id="myChart"></canvas>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg w-[100%] lg:w-[48%]">
+                <h2 class="text-2xl font-bold mb-4 text-center">Diagrama de Pie </h2>
+                <h3 class="text-sm text-center">Buen Estado</h3>
+                <div class="chart-container">
+                    <canvas id="myPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-4 lg:flex-row flex-col">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+                <h2 class="text-2xl font-bold mb-4 text-center">Distribución en Dimensiones</h2>
+                <h3 class="text-sm text-center">De productos dañados y buenos</h3>
+                <div class="chart-container" style="position: relative; height: 400px;">
+                    <canvas id="myRadarChart"></canvas>
+                </div>
+            </div>
+        </div>
+  
         <div class="grid gap-6">
         <div class="grid md:grid-cols-3 gap-6">
             <div class="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col" data-v0-t="card">
@@ -38,6 +65,9 @@
             </div>
             </div>
         </div>
+
+  
+        
         <div class="grid md:grid-cols-3 gap-6">
             <div class="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col" data-v0-t="card">
             <div class="flex flex-col space-y-1.5 p-6">
@@ -83,6 +113,110 @@
         </div>
         </div>
     </div>
+
+
+    <script>
+        // Diagrama de barras
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Naranjas', 'Granadas', 'Bananas', 'Manzanas'],
+                datasets: [{
+                    label: 'Aptos para vender',
+                    data: [{{ stats.orange.good }}, {{ stats.pomegranate.good }}, {{ stats.banana.good }}, {{ stats.apple.good }}], // Replace with your data
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'No apto para venta',
+                    data: [{{stats.orange.bad}}, {{stats.pomegranate.bad}}, {{stats.banana.bad}}, {{stats.apple.bad}}], // Replace with your data
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                scales: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        // Diagrama de pie
+        const ctxPie = document.getElementById('myPieChart').getContext('2d');
+        const myPieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['Naranjas', 'Granadas', 'Bananas', 'Manzanas'],
+                datasets: [{
+                    label: 'Frutas Analizadas',
+                    data: [{{ stats.orange.good }}, {{ stats.pomegranate.good }}, {{ stats.banana.good }}, {{ stats.apple.good }}], // Replace with your data
+                    backgroundColor: [
+                        'rgba(255, 69, 0, 0.3)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 200, 86, 0.2)',
+                        'rgba(255, 0, 0, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 69, 0, 0.3)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 0, 0, 0.7)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false // This ensures the chart scales correctly
+            }
+        });
+    </script>
+
+
+    <script>
+        // Diagrama de radar
+        const ctxRadar = document.getElementById('myRadarChart').getContext('2d');
+        const myRadarChart = new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Naranjas', 'Granadas', 'Bananas', 'Manzanas'],
+                datasets: [{
+                    label: 'Aptos para vender',
+                    data: [{{ stats.orange.good }}, {{ stats.pomegranate.good }}, {{ stats.banana.good }}, {{ stats.apple.good }}],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    pointBackgroundColor: 'rgba(75, 192, 192, 1)'
+                }, {
+                    label: 'No apto para venta',
+                    data: [{{ stats.orange.bad }}, {{ stats.pomegranate.bad }}, {{ stats.banana.bad }}, {{ stats.apple.bad }}],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    pointBackgroundColor: 'rgba(255, 99, 132, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+   
 
 {% endblock content %}
 
